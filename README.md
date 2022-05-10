@@ -1,1 +1,5 @@
-# information_retrieval_models
+# Proyecto Final SRI
+
+> Nadia González Fernández 
+> 
+> Jose Alejandro Labourdete-Lartigue Soto
