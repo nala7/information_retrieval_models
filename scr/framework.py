@@ -1,6 +1,6 @@
 import math
 
-from scr.vectorial_framework.document_collection import DocumentCollection, Query
+from scr.document_collection import DocumentCollection, Query
 
 
 class VectorFramework:
@@ -32,7 +32,7 @@ class VectorFramework:
         amount = 0
         for doc_id in dc.d_id2name.keys():
             try:
-                dc.frequencies(doc_id, term_id)
+                _ = dc.frequencies[doc_id, term_id]
                 amount = amount + 1
             except KeyError:
                 pass
@@ -41,17 +41,19 @@ class VectorFramework:
     def _compute_idf(self, term_id):
         doc_amount = len(self.document_collection.d_id2name)
         docs_in_which_appear = self._get_amount_of_doc_that_have_term(term_id)
-        return math.log(doc_amount/docs_in_which_appear)
+        return math.log(doc_amount/docs_in_which_appear, 10)
 
     def _compute_document_weight(self, document_id, term_id):
         dc = self.document_collection
         tf = self._compute_tf(document_id, term_id)
-        idf = self._compute_idf(term_id)
-        dc.idf[term_id] = idf  # Save idf for query weight calculation
+        idf = dc.idf[term_id]
         return tf * idf
 
     def compute_documents_weights(self):
         dc = self.document_collection
+
+        for term_id in dc.t_id2name.keys():
+            dc.idf[term_id] = self._compute_idf(term_id)
         for doc_id in dc.d_id2name.keys():
             for term_id in dc.t_id2name.keys():
                 weight = self._compute_document_weight(doc_id, term_id)
