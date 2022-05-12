@@ -1,3 +1,6 @@
+from document_type import Documents
+
+
 class DocumentCollection:
     def __init__(self):
         # (id_document, id_term) : repetitions
@@ -16,6 +19,27 @@ class DocumentCollection:
         self.weights_doc = {}
         # term_id : idf_of_ti. Must be set by framework
         self.idf = {}
+
+        self._doc_id = 1
+        self._term_id = 1
+
+    def add_documents(self, documents: list[Documents]):
+        for doc in documents:
+            doc_id = self._doc_id
+            self.d_name2id[doc.title] = doc_id
+            self.d_id2name[doc_id] = doc.title
+            self._doc_id += 1
+
+            for term in doc.filtered_text:
+                try:
+                    term_id = self.t_name2id[term]
+                    self.frequencies[doc.doc_id, term_id] += 1
+                except KeyError:
+                    term_id = self._term_id
+                    self.t_name2id[term] = term_id
+                    self.t_id2name[term_id] = term
+                    self.frequencies[doc.doc_id, term_id] = 1
+                    self._term_id += 1
 
 
 class Query:
