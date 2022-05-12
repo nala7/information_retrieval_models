@@ -33,12 +33,12 @@ class DocumentCollection:
             for term in doc.filtered_text:
                 try:
                     term_id = self.t_name2id[term]
-                    self.frequencies[doc.doc_id, term_id] += 1
+                    self.frequencies[doc_id, term_id] += 1
                 except KeyError:
                     term_id = self._term_id
                     self.t_name2id[term] = term_id
                     self.t_id2name[term_id] = term
-                    self.frequencies[doc.doc_id, term_id] = 1
+                    self.frequencies[doc_id, term_id] = 1
                     self._term_id += 1
 
 
