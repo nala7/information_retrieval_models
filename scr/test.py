@@ -22,4 +22,6 @@ def test1():
     dc.d_id2name = {1: 'd1', 2: 'd2', 3: 'd3', 4: 'd4', 5: 'd5'}
 
     vf = VectorFramework(dc)
+    dc = vf.document_collection
+
     print(dc)

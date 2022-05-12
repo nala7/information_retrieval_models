@@ -1,14 +1,29 @@
 import math
+import pickle
 
 from scr.document_collection import DocumentCollection, Query
 
 
 class VectorFramework:
-    def __init__(self, document_collection: DocumentCollection):
-        self.document_collection = document_collection
+    def __init__(self, document_collection: DocumentCollection, load_document=True):
         self.alpha = 0.4
         self.similarity_umbral = 0.8
+        if load_document:
+            try:
+                with open('document_collection.pickle', 'rb') as infile:
+                    document_collection = pickle.load(infile)
+            except FileNotFoundError:
+                self._process_and_save_dc(document_collection)
+        else:
+            self._process_and_save_dc(document_collection)
+
+        self.document_collection = document_collection
+
+    def _process_and_save_dc(self, document_collection):
+        self.document_collection = document_collection
         self.compute_documents_weights()
+        with open('document_collection.pickle', 'wb') as outfile:
+            pickle.dump(document_collection, outfile)
 
     def _get_max_freq_in_document(self, document_id):
         dc = self.document_collection
