@@ -1,5 +1,4 @@
-class Documents:
-    def __init__(self, doc_id, title, filtered_text):
-        self.doc_id = doc_id
+class Document:
+    def __init__(self, title, filtered_text):
         self.title = title
         self.filtered_text = filtered_text

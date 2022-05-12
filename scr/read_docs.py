@@ -1,7 +1,7 @@
 import os
 import spacy
 from typing import List, Any
-from document_type import Documents
+from document_type import Document
 
 
 def process_document(text):
@@ -39,12 +39,10 @@ def process_document(text):
 
 def read_dataset(path):
     doc_list = []
-    doc_id = 1
     for filename in os.listdir(path):
         with open(os.path.join(path, filename), 'r', errors='ignore') as f:
             text = f.read()
             filtered_text = process_document(text)
-            document = Documents(doc_id, filename, filtered_text)
+            document = Document(filename, filtered_text)
             doc_list.append(document)
-            doc_id += 1
             print(filename, "was read successfully")

@@ -1,4 +1,4 @@
-from document_type import Documents
+from document_type import Document
 
 
 class DocumentCollection:
@@ -23,7 +23,7 @@ class DocumentCollection:
         self._doc_id = 1
         self._term_id = 1
 
-    def add_documents(self, documents: list[Documents]):
+    def add_documents(self, documents: list[Document]):
         for doc in documents:
             doc_id = self._doc_id
             self.d_name2id[doc.title] = doc_id
