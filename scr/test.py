@@ -1,4 +1,4 @@
-from scr.document_collection import DocumentCollection
+from scr.utils import DocumentCollection
 from scr.framework import VectorFramework
 
 

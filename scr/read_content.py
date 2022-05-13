@@ -1,7 +1,7 @@
 import os
 import spacy
-from typing import List, Any
-from document_type import Document
+from typing import Any
+from utils import Document
 
 
 def process_content(text):

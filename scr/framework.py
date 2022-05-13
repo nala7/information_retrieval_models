@@ -1,7 +1,7 @@
 import math
 import pickle
 
-from scr.document_collection import DocumentCollection, Query
+from scr.utils import DocumentCollection, Query
 
 
 class VectorFramework:
