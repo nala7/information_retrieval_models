@@ -50,3 +50,10 @@ class Query:
         # term_id : weight. Must be set by framework.
         # If documents don't contain some term then it will not be in dict.
         self.weights = {}
+
+    def add_terms(self, terms: list[str]):
+        for term in terms:
+            try:
+                self.frequencies[term] += 1
+            except KeyError:
+                self.frequencies[term] = 1
