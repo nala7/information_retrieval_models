@@ -4,7 +4,7 @@ from typing import List, Any
 from document_type import Document
 
 
-def process_document(text):
+def process_content(text):
     nlp = spacy.load('en_core_web_sm')
 
     nlp.max_length = 5030000  # or higher
@@ -14,7 +14,7 @@ def process_document(text):
     lemma_list = []
     for token in doc:
         lemma_list.append(token.lemma_)
-    print("Tokenize+Lemmatize:")
+    # print("Tokenize+Lemmatize:")
     # print(lemma_list)
 
     # Filter the stopword
@@ -31,8 +31,8 @@ def process_document(text):
             filtered_sentence.remove(word)
         if word == '\n':
             filtered_sentence.remove(word)
-    print(" ")
-    print("Remove stopword & punctuation: ")
+    # print(" ")
+    # print("Remove stopword & punctuation: ")
     print(filtered_sentence)
     return filtered_sentence
 
@@ -42,7 +42,13 @@ def read_dataset(path):
     for filename in os.listdir(path):
         with open(os.path.join(path, filename), 'r', errors='ignore') as f:
             text = f.read()
-            filtered_text = process_document(text)
+            filtered_text = process_content(text)
             document = Document(filename, filtered_text)
             doc_list.append(document)
             print(filename, "was read successfully")
+    return doc_list
+
+
+def read_query(query_text):
+    filtered_query = process_content(query_text)
+    return filtered_query
