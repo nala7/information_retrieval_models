@@ -90,7 +90,6 @@ class VectorFramework:
 
     def _sim_of_document(self, document_id, query: Query):
         dc = self.document_collection
-        self.compute_query_weights(query)
 
         a = 0  # refers to numerator in similarity equation
         b = 0
@@ -106,7 +105,8 @@ class VectorFramework:
 
         return a / (b * c)
 
-    def sim(self, query: Query):
+    def find(self, query: Query):
+        self.compute_query_weights(query)
         documents_similarity = {}  # sim : document_id
         for doc_id in self.document_collection.d_id2name.keys():
             similarity = self._sim_of_document(doc_id, query)
