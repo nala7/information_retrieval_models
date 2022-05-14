@@ -1,18 +1,14 @@
-from os import getcwd
-
-# from read_content import read_dataset, read_query
-from utils import DocumentCollection, Query, Document
+from read_content import read_dataset, read_query
+from utils import DocumentCollection, Query
 from framework import VectorFramework
 
 print('PLEASE ENTER PATH TO DATA SET')
-# doc_path = input()
-# doc_path = getcwd() + "\\test"
-# print('PLEASE ENTER QUERY')
-# query = input()
-# query = "jesus god church good pray"
+doc_path = input()
+print('PLEASE ENTER QUERY')
+query = input()
 
-# filtered_doc_list = read_dataset(doc_path)
-# filtered_query_list = read_query(query)
+filtered_doc_list = read_dataset(doc_path)
+filtered_query_list = read_query(query)
 
 # d1 = Document('d1', ['leon', 'leon', 'leon'])
 # d2 = Document('d2', ['leon', 'leon', 'leon', 'zorro'])
@@ -22,9 +18,9 @@ print('PLEASE ENTER PATH TO DATA SET')
 
 
 document_collection = DocumentCollection()
-document_collection.add_documents('LIST OF DOCUMENT')
+document_collection.add_documents(filtered_doc_list)
 query = Query()
-query.add_terms('LIST OF STR (TERMS)')
+query.add_terms(filtered_query_list)
 
 f = VectorFramework(document_collection)
 retrieve = f.find(query)

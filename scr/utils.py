@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Document:
     def __init__(self, title, filtered_text):
         self.title = title
@@ -26,7 +29,7 @@ class DocumentCollection:
         self._doc_id = 1
         self._term_id = 1
 
-    def add_documents(self, documents: list[Document]):
+    def add_documents(self, documents: List[Document]):
         for doc in documents:
             doc_id = self._doc_id
             self.d_name2id[doc.title] = doc_id
@@ -57,7 +60,7 @@ class Query:
         # If documents don't contain some term then it will not be in dict.
         self.weights = {}
 
-    def add_terms(self, terms: list[str]):
+    def add_terms(self, terms: List[str]):
         for term in terms:
             try:
                 self.frequencies[term] += 1

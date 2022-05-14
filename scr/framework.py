@@ -1,13 +1,13 @@
 import math
 import pickle
 
-from scr.utils import DocumentCollection, Query
+from utils import DocumentCollection, Query
 
 
 class VectorFramework:
     def __init__(self, document_collection: DocumentCollection, load_document=True):
         self.alpha = 0.4
-        self.similarity_umbral = 0.8
+        self.similarity_umbral = 0.6
         if load_document:
             try:
                 with open('document_collection.pickle', 'rb') as infile:

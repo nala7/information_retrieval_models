@@ -40,6 +40,8 @@ def process_content(text):
 def read_dataset(path):
     doc_list = []
     for filename in os.listdir(path):
+        if filename[0] == '.':  # if file is hidden skip
+            continue
         with open(os.path.join(path, filename), 'r', errors='ignore') as f:
             text = f.read()
             filtered_text = process_content(text)
