@@ -112,15 +112,18 @@ class VectorFramework:
             similarity = self._sim_of_document(doc_id, query)
             if similarity > self.similarity_umbral:
                 try:
-                    doc_list = documents_similarity[similarity]
+                    doc_list = documents_similarity[str(similarity)]
                     doc_list.append(doc_id)
                 except KeyError:
-                    documents_similarity = [doc_id]
+                    documents_similarity[str(similarity)] = [doc_id]
 
         similarities_selected = list(documents_similarity.keys())
         similarities_selected.sort()
-        return_list = []
+        return_list_id = []
         for val in similarities_selected:
-            return_list.extend(documents_similarity[val])
+            return_list_id.extend(documents_similarity[val])
 
-        return return_list
+        return_list_name = []
+        for doc_id in return_list_id:
+            return_list_name.append(self.document_collection.d_id2name[doc_id])
+        return return_list_name
