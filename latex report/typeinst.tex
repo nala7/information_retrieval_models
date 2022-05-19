@@ -1,0 +1,161 @@
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amssymb}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{listings}
+
+
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\begin{document}
+
+\mainmatter  
+
+\title{Sistemas de Recuperación de Información:\\Proyecto Final}
+
+\titlerunning{Sistemas de Recuperación de Información: Proyecto Final}
+
+
+\author{Nadia González Fernández \\ José Alejandro Labourdette-Lartigue Soto\\ C-512}
+
+\authorrunning{Sistemas de Recuperación de Información}
+
+
+\institute{5to Año - Ciencias de la Computación - Curso 2022\\
+	Facultad de Matemática y Computación\\
+	Universidad de La Habana, La Habana, Cuba}
+
+
+\toctitle{Sistemas de Recuperación de Información}
+\tocauthor{Authors' Instructions}
+\maketitle
+
+
+\begin{abstract}
+\emph{El presente informe describe un sistema de recuperación de información basado en el modelo clásico Vectorial. Se explica el diseño del sistema, las ventajas y desventajas del modelo escogido y las herramientas utilizadas.}
+\keywords{Model Vectorial, spaCy, Python, Consultas, Motor de Búsqueda}
+\end{abstract}
+
+
+\section{Introducción}\label{sec:introducción}
+La recuperación de información es una disciplina que, con el incremento de la informatización y los volúmenes de datos en la red, cada vez se hace más necesaria la utilización de sistemas de recuperación de información.
+
+Un sistema de información es un conjunto de componentes interrelacionados que permiten capturar, procesar almacenar y distribuir la información para apoyar la toma de decisiones y el control en una organización.
+Por otra parte, la recuperación de información es la localización de materiales de naturaleza no estructurada para satisfacer una necesidad de información de una larga colección.
+
+En el presente proyecto se realiza un sistema de recuperación de información con la utilización del modelo vectorial.
+El sistema se especializa en la recuperación de documentos de texto dada su relevancia respecto a una consulta.
+
+El proyecto se encuentra en github: \url{https://github.com/nala7/information_retrieval_models}
+
+\section{Diseño del Sistema}\label{sec:diseño-del-sistema}
+\textbf{Etapas de la Recuperación de Información:}
+
+\subsection{Procesamiento de la consulta hecha por un usuario}\label{subsec:procesamiento-de-la-consulta-hecha-por-un-usuario}
+Las consultas son recibidas como string.
+Luego son tokenizadas y lematizadas con la biblioteca de Python spaCy.
+
+\subsection{Representación de los documentos y la consulta}\label{subsec:representación-de-los-documentos-y-la-consulta}
+Los documentos y las consultas son expresados en las clases Document y Query respectivamente.
+Un documento, como estructura de datos, contiene el nombre del mismo y las palabras que fueron devueltas por el algoritmo de procesamiento de texto.
+Una query contiene los términos que fueron devueltos por el algoritmo de procesamiento de texto para eliminar stopwords y demás elementos del lenguaje sin carga semántica.
+
+La clase DocumentCollection es la que representa la colección entera de documentos, en ella tiene un diccionario que permiten saber la frecuencia de ocurrencia de los términos en cada documento.
+
+Como parte de la estrategia para ahorrar memoria se asignan a los nombres de los documentos y a los términos valores numéricos únicos.
+4 diccionarios se usan para mapear esta representación numérica.
+\subsection{Funcionamiento del motor de búsqueda}\label{subsec:funcionamiento-del-motor-de-búsqueda}
+El motor de búsqueda es una clase de Python que al ser instanciada se le específica la colección de documentos sobre la cual se desea trabajar.
+En el propio constructor se da la instrucción de computar los pesos de los documentos.
+El proceso de computar los pesos sigue los pasos establecidos por el motor de búsqueda vectorial para calcular pesos.
+Dichos valores son almacenados en la propia instancia de DocumentCollection.
+
+Para realizar búsquedas existe la función find(), definida en el propio framework que recibe la query sobre la que se desea buscar.
+La propia función computa los pesos de la query y calcula la similitud con cada documento.
+
+\subsection{Obtención de los resultados}\label{subsec:obtención-de-los-resultados}
+Para la obtención de resultados se define un límite de similitud mínima necesaria para considerar un documento relevante.
+Los nombres de los documentos con similitud mayor que ese mínimo son devueltos, ordenados de mayor a menor similitud
+
+
+\section{Herramientas Utilizadas}\label{sec:herramientas-utilizadas}
+Presentación de las herramientas empleadas para la programación y aspectos más importantes del código.
+
+Para el procesamiento de los documentos y las consultas se utilizó spaCy. Esta es una biblioteca de software para el procesamiento de lenguajes naturales desarrollado por Matt Honnibal y programado en lenguaje Python.
+Es software libre con Licencia MIT su repositorio se encuentra disponible en Github.
+
+Esta es utilizada en la clase \textbf{read\_content.py}
+
+
+\medskip
+\noindent
+{\it spaCy usado para procesar texto}
+
+\begin{lstlisting}[language=Python,label={lst:lstlisting}]
+nlp = spacy.load('en_core_web_sm')
+
+nlp.max_length = 5030000  # or higher
+doc = nlp(text)
+
+# Tokenization and lemmatization
+lemma_list = []
+for token in doc:
+	lemma_list.append(token.lemma_)
+
+# Filter the stopword
+filtered_sentence: list[Any] = []
+for word in lemma_list:
+	lexeme = nlp.vocab[word]
+	if not lexeme.is_stop:
+		filtered_sentence.append(word)
+
+# Remove punctuation
+punctuations = "?:!.,;"
+for word in filtered_sentence:
+	if word in punctuations:
+		filtered_sentence.remove(word)
+	if word == '\n':
+		filtered_sentence.remove(word)
+return filtered_sentence
+\end{lstlisting}
+
+
+%\section{Evaluación del Sistema}
+%Evaluación del sistema empleando las métricas objetivas y subjetivas estudiadas en clase empleando al menos dos colecciones de prueba distintas (incorporar consultas de ejemplo con los resultados proveídos por la solución, al menos una por cada colección de prueba).
+
+
+\section{Ventajas y Desventajas}\label{sec:ventajas-y-desventajas}
+
+\subsection{Modelo vectorial}\label{subsec:modelo-vectorial}
+En el modelo Vectorial el esquema de ponderación $tf-idf$ de los documentos resulta en un buen rendimiento de la recuperación.
+La estrategia de coincidencia parcial permite la recuperación de documentos que se aproximen a los requerimientos de la consulta.
+Además la fórmula del coseno ordena los documentos de acuerdo al grado de similitud con la consulta.
+Por otra parte, el modelo vectorial tiene como desventaja que asume que los términos indexados son mutuamente independientes, sin embargo, esto hace que su rendimiento sea mejor.
+
+Con respecto al MRI Booleano, el Vectorial tiene como ventaja que permite hacer un ranking de los documentos y da una correspondencia parcial entre documentos y consultas.
+En comparación con el modelo Probabilístico se ha demostrado que el MRI Vectorial tiene un mejor desempeño.
+
+El modelo Vectorial es simple, rápido y, en algunos casos, brinda mejores resultados en la recuperación de información que el resto de los MRI clásicos.
+
+%\section{Recomendaciones}
+%Recomendaciones para trabajos futuros que mejoren la propuesta.
+
+
+\begin{thebibliography}{4}
+
+\bibitem{jour} Prof.
+Carlos Fleitasa Aparicio, Profe.
+Marcel E. Sánchez Aguilar, Departamento de Programación, Facultad MATCOM, Universidad de La Habana (2021)
+\bibitem{url} Text normalization with spacy and nltk, \url{https://towardsdatascience.com/text-normalization-with-spacy-and-nltk-1302ff430119}
+\bibitem{url} Documentación oficial de Spacy \url{https://spacy.io/}
+
+\end{thebibliography}
+
+
+\end{document}
