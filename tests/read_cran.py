@@ -19,8 +19,9 @@ def parse_queries(text: str):
 
 
 def parse_docs(text: str):
+    docs = re.split('.I \d+\n.T\n.+?(?=.A)\n.B.+?(?=.W)')
     # docs = re.split('.I\d+\n.T\w+\n.A\w+\n.B\w+\n.W', text)
-    docs = re.findall('?=\.T', text)
+    # docs = re.findall('?=\.T', text)
     print(docs)
 
 
