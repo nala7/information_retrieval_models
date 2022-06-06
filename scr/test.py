@@ -1,4 +1,4 @@
-from scr.utils import DocumentCollection
+from scr.utils import DocumentCollection, Query
 from scr.framework import VectorFramework
 
 
@@ -21,7 +21,14 @@ def test1():
     dc.d_name2id = {'d1': 1, 'd2': 2, 'd3': 3, 'd4': 4, 'd5': 5}
     dc.d_id2name = {1: 'd1', 2: 'd2', 3: 'd3', 4: 'd4', 5: 'd5'}
 
-    vf = VectorFramework(dc)
-    dc = vf.document_collection
+    vf = VectorFramework(dc, load_document=False)
+    q = Query()
+    q.add_terms(['iguana', 'leon'])
 
-    print(dc)
+    print(vf.find(q))
+
+    # dc = vf.document_collection
+
+    # print(dc)
+
+test1()

@@ -7,7 +7,7 @@ from utils import DocumentCollection, Query
 class VectorFramework:
     def __init__(self, document_collection: DocumentCollection, load_document=True):
         self.alpha = 0.4
-        self.similarity_umbral = 0.6
+        self.similarity_umbral = 0
         if load_document:
             try:
                 with open('document_collection.pickle', 'rb') as infile:
@@ -81,11 +81,11 @@ class VectorFramework:
             term_id = dc.t_name2id[term_name]
             try:
                 q_term_freq = query.frequencies[term_name]
+                a = self.alpha + (1 - self.alpha) * q_term_freq / max_freq
+                b = dc.idf[term_id]
+                query.weights[term_id] = a * b
             except KeyError:  # Term it's not in query
-                q_term_freq = 0
-            a = self.alpha + (1-self.alpha) * q_term_freq / max_freq
-            b = dc.idf[term_id]
-            query.weights[term_id] = a * b
+                query.weights[term_id] = 0
         return query
 
     def _sim_of_document(self, document_id, query: Query):
@@ -103,6 +103,8 @@ class VectorFramework:
         b = math.sqrt(b)
         c = math.sqrt(c)
 
+        if c == 0:
+            return 0
         return a / (b * c)
 
     def find(self, query: Query):
