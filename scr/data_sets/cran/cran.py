@@ -20,6 +20,19 @@ def read_cran_documents():
             print('Error: ', error)
             return []
             
+def read_cran_queries():
+    with open('scr\\data_sets\\cran\\cran.qry', 'r') as file:
+        queries = []
+        try:
+            _read_i(file)
+            not_finished = True
+            while not_finished:
+                text, not_finished = _read_w(file)
+                queries.append(text)
+            return queries
+        except ReadingError as error:
+            print('Error: ', error)
+            return []
 
 def _read_i(file: TextIOWrapper):
     line = file.readline()
