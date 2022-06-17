@@ -130,3 +130,4 @@ dmypy.json
 
 .idea/
 /scr/document_collection.pickle
+.vscode/
