@@ -22,8 +22,7 @@ def test1():
     dc.d_id2name = {1: 'd1', 2: 'd2', 3: 'd3', 4: 'd4', 5: 'd5'}
 
     vf = VectorFramework(dc, load_document=False)
-    q = Query()
-    q.add_terms(['iguana', 'leon'])
+    q = Query(['iguana', 'leon'])
 
     print(vf.find(q))
 

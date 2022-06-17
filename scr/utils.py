@@ -52,13 +52,15 @@ class DocumentCollection:
 
 
 class Query:
-    def __init__(self):
+    def __init__(self, terms: List[str]):
         # term_name : repetitions
         self.frequencies = {}
 
         # term_id : weight. Must be set by framework.
         # If documents don't contain some term then it will not be in dict.
         self.weights = {}
+
+        self.add_terms(terms)
 
     def add_terms(self, terms: List[str]):
         for term in terms:
