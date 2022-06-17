@@ -1,7 +1,9 @@
 import os
 import spacy
 from typing import Any
-from utils import Document
+from utils import Document, Query
+from data_sets.cran.cran import read_cran_documents, read_cran_queries
+import pickle
 
 
 def process_content(text):
@@ -14,27 +16,25 @@ def process_content(text):
     lemma_list = []
     for token in doc:
         lemma_list.append(token.lemma_)
-    # print("Tokenize+Lemmatize:")
-    # print(lemma_list)
 
     # Filter the stopword
-    filtered_sentence: list[Any] = []
+    filtered_sentence1: list[Any] = []
     for word in lemma_list:
         lexeme = nlp.vocab[word]
         if not lexeme.is_stop:
-            filtered_sentence.append(word)
+            filtered_sentence1.append(word)
 
     # Remove punctuation
-    punctuations = "?:!.,;|<>*&$%#@!()_-=+"
-    for word in filtered_sentence:
+    punctuations = "?:!.,;|<>*&$%#@!()_-=+ "
+    filtered_sentence2 = []
+    for word in filtered_sentence1:
         if word in punctuations:
-            filtered_sentence.remove(word)
+            continue
         if word == '\n':
-            filtered_sentence.remove(word)
-    # print(" ")
-    # print("Remove stopword & punctuation: ")
-    print(filtered_sentence)
-    return filtered_sentence
+            continue
+        filtered_sentence2.append(word)  
+    
+    return filtered_sentence2
 
 
 def read_dataset(path):
@@ -50,6 +50,34 @@ def read_dataset(path):
             print(filename, "was read successfully")
     return doc_list
 
+def get_cran_dataset(load_from_memory = True):
+    if load_from_memory:
+        with open('data_sets\\cran\\cran.pickle', 'rb') as infile:
+            documents, queries = pickle.load(infile)
+    else:
+        documents, queries = _compute_cran_dataset()
+        with open('data_sets\\cran\\cran.pickle', 'wb') as outfile:
+            pickle.dump((documents,queries), outfile)
+    
+    return documents, queries
+
+def _compute_cran_dataset():
+    documents_data = read_cran_documents()
+    documents = []
+    i = 1
+    for (title, text) in documents_data:
+        processed_text = process_content(text)
+        documents.append(Document(title, processed_text))
+        print('Document: ', i)
+        i+= 1
+
+    queries_data = read_cran_queries()
+    queries = []
+    for text in queries_data:
+        processed_text = process_content(text)
+        queries.append(Query(processed_text))
+
+    return documents, queries
 
 def read_query(query_text):
     filtered_query = process_content(query_text)
