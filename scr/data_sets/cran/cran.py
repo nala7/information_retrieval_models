@@ -4,7 +4,7 @@ from typing import Tuple
 from numpy import true_divide
 
 def read_cran_documents():
-    with open('scr\\cran\\cran.all.1400', 'r') as file:
+    with open('scr\\data_sets\\cran\\cran.all.1400', 'r') as file:
         documents = []
         try:
             _read_i(file)
