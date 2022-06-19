@@ -25,10 +25,10 @@ def process_content(text):
             filtered_sentence1.append(word)
 
     # Remove punctuation
-    punctuations = "?:!.,;|<>*&$%#@!()_-=+ "
+    punctuations = "?:!.,;|<>*&$%#@!()_-=+"
     filtered_sentence2 = []
     for word in filtered_sentence1:
-        if word in punctuations:
+        if (word in punctuations) or word.isspace():
             continue
         if word == '\n':
             continue
@@ -52,11 +52,11 @@ def read_dataset(path):
 
 def get_cran_dataset(load_from_memory = True):
     if load_from_memory:
-        with open('data_sets\\cran\\cran.pickle', 'rb') as infile:
+        with open('scr\\data_sets\\cran\\cran.pickle', 'rb') as infile:
             documents, queries = pickle.load(infile)
     else:
         documents, queries = _compute_cran_dataset()
-        with open('data_sets\\cran\\cran.pickle', 'wb') as outfile:
+        with open('scr\\data_sets\\cran\\cran.pickle', 'wb') as outfile:
             pickle.dump((documents,queries), outfile)
     
     return documents, queries
@@ -65,17 +65,20 @@ def _compute_cran_dataset():
     documents_data = read_cran_documents()
     documents = []
     i = 1
-    for (title, text) in documents_data:
+    for (id, title, text) in documents_data:
         processed_text = process_content(text)
-        documents.append(Document(title, processed_text))
+        documents.append(Document(id, title, processed_text))
         print('Document: ', i)
         i+= 1
 
     queries_data = read_cran_queries()
     queries = []
-    for text in queries_data:
+    i = 1
+    for id, text in queries_data:
         processed_text = process_content(text)
-        queries.append(Query(processed_text))
+        queries.append(Query(id, processed_text))
+        print('Query: ', i)
+        i+= 1
 
     return documents, queries
 
