@@ -7,14 +7,15 @@ def read_cran_documents():
     with open('scr\\data_sets\\cran\\cran.all.1400', 'r') as file:
         documents = []
         try:
-            _read_i(file)
+            id = _read_i(file)
             not_finished = True
             while not_finished:
                 title = _read_t(file)
                 _read_a(file)
                 _read_b(file)
-                text, not_finished = _read_w(file)
-                documents.append((title,text))
+                text, not_finished, new_id = _read_w(file)
+                documents.append((id,title,text))
+                id = new_id
             return documents
         except ReadingError as error:
             print('Error: ', error)
@@ -24,11 +25,13 @@ def read_cran_queries():
     with open('scr\\data_sets\\cran\\cran.qry', 'r') as file:
         queries = []
         try:
-            _read_i(file)
+            id = _read_i(file)
             not_finished = True
             while not_finished:
-                text, not_finished = _read_w(file)
-                queries.append(text)
+                file.readline() # Skip .W line
+                text, not_finished, new_id = _read_w(file)
+                queries.append((id, text))
+                id = new_id
             return queries
         except ReadingError as error:
             print('Error: ', error)
@@ -38,6 +41,8 @@ def _read_i(file: TextIOWrapper):
     line = file.readline()
     if not line.startswith('.I'):
         raise ReadingError('Expected .I')
+    id_literal = line.split()[1]
+    return int(id_literal)
 
 def _read_t(file: TextIOWrapper) -> str:
     line = file.readline()
@@ -67,10 +72,10 @@ def _read_w(file: TextIOWrapper):
     while True:
         line = file.readline().removesuffix('\n')
         if line.startswith('.I'):
-            return text, True
+            return text, True, int(line.split()[1])
         if line == '':
-            return text, False
-        text += line
+            return text, False, -1
+        text += ' ' + line
 
 class ReadingError(LookupError):
     def __init__(self, *args: object) -> None:
