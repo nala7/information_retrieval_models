@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 .idea/
-/scr/document_collection.pickle
 .vscode/
