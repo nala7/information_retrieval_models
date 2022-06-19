@@ -1,33 +1,23 @@
-from scr.utils import DocumentCollection, Query
-from scr.framework import VectorFramework
+from utils import DocumentCollection, Query, Document
+from framework import VectorFramework
 
 
 def test1():
-    dc = DocumentCollection()
+    d1 = Document(1, 'd1', ['leon', 'leon', 'leon'])
+    d2 = Document(2, 'd2', ['leon', 'leon', 'leon', 'zorro'])
+    d3 = Document(3, 'd3', ['leon', 'zorro', 'nutria'])
+    d4 = Document(4, 'd4', ['leon', 'zorro', 'leon', 'zorro'])
+    d5 = Document(5, 'd5', ['nutria'])
 
-    dc.frequencies[1, 1] = 3
-    dc.frequencies[2, 1] = 3
-    dc.frequencies[2, 2] = 1
-    dc.frequencies[3, 1] = 1
-    dc.frequencies[3, 2] = 1
-    dc.frequencies[3, 3] = 1
-    dc.frequencies[4, 1] = 3
-    dc.frequencies[4, 2] = 3
-    dc.frequencies[5, 3] = 1
-
-    dc.t_name2id = {'leon': 1, 'zorro': 2, 'nutria': 3}
-    dc.t_id2name = {1: 'leon', 2: 'zorro', 3: 'nutria'}
-
-    dc.d_name2id = {'d1': 1, 'd2': 2, 'd3': 3, 'd4': 4, 'd5': 5}
-    dc.d_id2name = {1: 'd1', 2: 'd2', 3: 'd3', 4: 'd4', 5: 'd5'}
+    dc = DocumentCollection([d1, d2, d3, d4, d5])
 
     vf = VectorFramework(dc, load_document=False)
-    q = Query(['iguana', 'leon'])
+    q = Query(1, ['iguana', 'nutria'])
 
     print(vf.find(q))
+
+    print('done')
 
     # dc = vf.document_collection
 
     # print(dc)
-
-test1()
