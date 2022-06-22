@@ -25,7 +25,6 @@ class VectorFramework:
         with open('scr/document_collection.pickle', 'wb') as outfile:
             pickle.dump(document_collection, outfile)
 
-
     def _compute_tf(self, document_id, term_id):
         dc = self.document_collection
         max_freq = dc.max_frequency

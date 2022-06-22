@@ -1,5 +1,5 @@
 from read_content import read_dataset, read_query, get_cran_dataset
-from test import test1
+# from test import test1
 from utils import DocumentCollection, Query
 from framework import VectorFramework
 
@@ -25,9 +25,6 @@ from framework import VectorFramework
 
 # f = VectorFramework(document_collection)
 # retrieve = f.find(query)
-
-
-
 
 
 documents, queries = get_cran_dataset()

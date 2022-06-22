@@ -50,6 +50,7 @@ def read_dataset(path):
             print(filename, "was read successfully")
     return doc_list
 
+
 def get_cran_dataset(load_from_memory = True):
     if load_from_memory:
         with open('scr\\data_sets\\cran\\cran.pickle', 'rb') as infile:
@@ -57,9 +58,10 @@ def get_cran_dataset(load_from_memory = True):
     else:
         documents, queries = _compute_cran_dataset()
         with open('scr\\data_sets\\cran\\cran.pickle', 'wb') as outfile:
-            pickle.dump((documents,queries), outfile)
+            pickle.dump((documents, queries), outfile)
     
     return documents, queries
+
 
 def _compute_cran_dataset():
     documents_data = read_cran_documents()
@@ -69,7 +71,7 @@ def _compute_cran_dataset():
         processed_text = process_content(text)
         documents.append(Document(id, title, processed_text))
         print('Document: ', i)
-        i+= 1
+        i += 1
 
     queries_data = read_cran_queries()
     queries = []
@@ -78,9 +80,10 @@ def _compute_cran_dataset():
         processed_text = process_content(text)
         queries.append(Query(id, processed_text))
         print('Query: ', i)
-        i+= 1
+        i += 1
 
     return documents, queries
+
 
 def read_query(query_text):
     filtered_query = process_content(query_text)
