@@ -54,11 +54,11 @@ def read_dataset(path):
 
 def get_cran_dataset(load_from_memory=True):
     if load_from_memory:
-        with open('scr\\data_sets\\cran\\cran.pickle', 'rb') as infile:
+        with open('data_sets/cran/cran.pickle', 'rb') as infile:
             documents, queries = pickle.load(infile)
     else:
         documents, queries = _compute_cran_dataset()
-        with open('scr\\data_sets\\cran\\cran.pickle', 'wb') as outfile:
+        with open('data_sets/cran/cran.pickle', 'wb') as outfile:
             pickle.dump((documents, queries), outfile)
     
     return documents, queries

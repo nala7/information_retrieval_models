@@ -2,6 +2,7 @@ from read_content import read_dataset, read_query, get_cran_dataset
 # from test import test1
 from utils import DocumentCollection, Query
 from framework import VectorFramework
+import os
 
 # print('PLEASE ENTER PATH TO DATA SET')
 # doc_path = input()
@@ -25,8 +26,8 @@ from framework import VectorFramework
 
 # f = VectorFramework(document_collection)
 # retrieve = f.find(query)
-
-
+os.chdir('scr')
+a = os.getcwd()
 documents, queries = get_cran_dataset()
 document_collection = DocumentCollection(documents)
 

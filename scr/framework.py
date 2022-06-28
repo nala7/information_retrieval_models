@@ -11,9 +11,7 @@ class VectorFramework:
         self.similarity_umbral = 0.3
         if load_document:
             try:
-                cur_dir = os.getcwd()
-                print(cur_dir)
-                with open(cur_dir+'/document_collection.pickle', 'rb') as infile:
+                with open('document_collection.pickle', 'rb') as infile:
                     document_collection = pickle.load(infile)
             except FileNotFoundError:
                 self._process_and_save_dc(document_collection)
@@ -25,10 +23,7 @@ class VectorFramework:
     def _process_and_save_dc(self, document_collection):
         self.document_collection = document_collection
         self.compute_documents_weights()
-
-        cur_dir = os.getcwd()
-        print(cur_dir)
-        with open(cur_dir+'/document_collection.pickle', 'wb') as outfile:
+        with open('document_collection.pickle', 'wb') as outfile:
             pickle.dump(document_collection, outfile)
 
     def _compute_tf(self, document_id, term_id):
