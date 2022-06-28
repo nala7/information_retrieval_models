@@ -31,6 +31,7 @@ documents, queries = get_cran_dataset()
 document_collection = DocumentCollection(documents)
 
 f = VectorFramework(document_collection)
+print(f)
 names, ids = f.find(queries[0])
 
 # test1()
