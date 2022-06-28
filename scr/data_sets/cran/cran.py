@@ -1,10 +1,11 @@
 from io import TextIOWrapper
-from typing import Tuple
 
-from numpy import true_divide
 
 def read_cran_documents():
-    with open('scr\\data_sets\\cran\\cran.all.1400', 'r') as file:
+    import os
+    cur_dir = os.getcwd()
+    print(cur_dir)
+    with open(cur_dir+'/data_sets/cran/cran.all.1400', 'r') as file:
         documents = []
         try:
             id = _read_i(file)
@@ -14,21 +15,25 @@ def read_cran_documents():
                 _read_a(file)
                 _read_b(file)
                 text, not_finished, new_id = _read_w(file)
-                documents.append((id,title,text))
+                documents.append((id, title, text))
                 id = new_id
             return documents
         except ReadingError as error:
             print('Error: ', error)
             return []
-            
+
+
 def read_cran_queries():
-    with open('scr\\data_sets\\cran\\cran.qry', 'r') as file:
+    import os
+    cur_dir = os.getcwd()
+    print(cur_dir)
+    with open(cur_dir+'/data_sets/cran/cran.qry', 'r') as file:
         queries = []
         try:
             id = _read_i(file)
             not_finished = True
             while not_finished:
-                file.readline() # Skip .W line
+                file.readline()  # Skip .W line
                 text, not_finished, new_id = _read_w(file)
                 queries.append((id, text))
                 id = new_id
@@ -37,12 +42,14 @@ def read_cran_queries():
             print('Error: ', error)
             return []
 
+
 def _read_i(file: TextIOWrapper):
     line = file.readline()
     if not line.startswith('.I'):
         raise ReadingError('Expected .I')
     id_literal = line.split()[1]
     return int(id_literal)
+
 
 def _read_t(file: TextIOWrapper) -> str:
     line = file.readline()
@@ -55,17 +62,20 @@ def _read_t(file: TextIOWrapper) -> str:
             return title
         title += line
 
+
 def _read_a(file: TextIOWrapper):
     while True:
         line = file.readline()
         if line.startswith('.B'):
             break
 
+
 def _read_b(file: TextIOWrapper):
     while True:
         line = file.readline()
         if line.startswith('.W'):
             break
+
 
 def _read_w(file: TextIOWrapper):
     text = ''
@@ -76,6 +86,7 @@ def _read_w(file: TextIOWrapper):
         if line == '':
             return text, False, -1
         text += ' ' + line
+
 
 class ReadingError(LookupError):
     def __init__(self, *args: object) -> None:

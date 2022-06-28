@@ -28,9 +28,9 @@ from framework import VectorFramework
 
 
 documents, queries = get_cran_dataset()
-# document_collection = DocumentCollection(documents)
+document_collection = DocumentCollection(documents)
 
-f = VectorFramework([])
+f = VectorFramework(document_collection)
 names, ids = f.find(queries[0])
 
 # test1()

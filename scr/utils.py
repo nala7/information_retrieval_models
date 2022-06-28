@@ -38,7 +38,6 @@ class DocumentCollection:
     def add_documents(self, documents: List[Document]):
         for doc in documents:
             doc_id = self._doc_id
-            print('Added to doc_collection: ', doc_id)
             self.d_name2id[doc.title] = doc_id
             self.d_id2name[doc_id] = doc.title
             self.terms_id_of_document_id[doc_id] = []
