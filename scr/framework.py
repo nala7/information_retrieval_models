@@ -116,7 +116,7 @@ class VectorFramework:
         documents_similarity = {}  # sim : document_id
         for doc_id in self.document_collection.d_id2name.keys():
             similarity = self._sim_of_document(doc_id, query)
-            if similarity > self.similarity_umbral:
+            if similarity >= self.similarity_umbral:
                 try:
                     doc_list = documents_similarity[str(similarity)]
                     doc_list.append(doc_id)
