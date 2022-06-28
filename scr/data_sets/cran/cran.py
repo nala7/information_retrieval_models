@@ -1,8 +1,9 @@
+import os
+
 from io import TextIOWrapper
 
 
 def read_cran_documents():
-    import os
     cur_dir = os.getcwd()
     print(cur_dir)
     with open(cur_dir+'/data_sets/cran/cran.all.1400', 'r') as file:
@@ -24,7 +25,6 @@ def read_cran_documents():
 
 
 def read_cran_queries():
-    import os
     cur_dir = os.getcwd()
     print(cur_dir)
     with open(cur_dir+'/data_sets/cran/cran.qry', 'r') as file:

@@ -1,5 +1,6 @@
 import os
 import spacy
+
 from typing import Any
 from utils import Document, Query
 from data_sets.cran.cran import read_cran_documents, read_cran_queries
@@ -51,7 +52,7 @@ def read_dataset(path):
     return doc_list
 
 
-def get_cran_dataset(load_from_memory = True):
+def get_cran_dataset(load_from_memory=True):
     if load_from_memory:
         with open('scr\\data_sets\\cran\\cran.pickle', 'rb') as infile:
             documents, queries = pickle.load(infile)

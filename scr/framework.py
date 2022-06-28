@@ -1,5 +1,6 @@
 import math
 import pickle
+import os
 
 from utils import DocumentCollection, Query
 
@@ -10,7 +11,6 @@ class VectorFramework:
         self.similarity_umbral = 0.3
         if load_document:
             try:
-                import os
                 cur_dir = os.getcwd()
                 print(cur_dir)
                 with open(cur_dir+'/document_collection.pickle', 'rb') as infile:
@@ -26,7 +26,6 @@ class VectorFramework:
         self.document_collection = document_collection
         self.compute_documents_weights()
 
-        import os
         cur_dir = os.getcwd()
         print(cur_dir)
         with open(cur_dir+'/document_collection.pickle', 'wb') as outfile:
@@ -88,7 +87,7 @@ class VectorFramework:
                 a = self.alpha + (1 - self.alpha) * q_term_freq / max_freq
                 b = dc.idf[term_id]
                 query.weights[term_id] = a * b
-            except KeyError: # term is not in vocabulary
+            except KeyError:  # term is not in vocabulary
                 continue
         return query
 
@@ -113,7 +112,7 @@ class VectorFramework:
         b = math.sqrt(b)
         c = math.sqrt(c)
 
-        if b == 0 or c == 0: # document is empty, or query have no term of vocabulary
+        if b == 0 or c == 0:  # document is empty, or query have no term of vocabulary
             return 0
         return a / (b * c)
 
@@ -130,7 +129,7 @@ class VectorFramework:
                     documents_similarity[str(similarity)] = [doc_id]
 
         similarities_selected = list(documents_similarity.keys())
-        similarities_selected.sort(reverse= True)
+        similarities_selected.sort(reverse=True)
         return_list_id = []
         for val in similarities_selected:
             return_list_id.extend(documents_similarity[val])
