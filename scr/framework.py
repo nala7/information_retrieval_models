@@ -1,6 +1,5 @@
 import math
 import pickle
-import os
 
 from utils import DocumentCollection, Query
 
@@ -126,10 +125,13 @@ class VectorFramework:
         similarities_selected = list(documents_similarity.keys())
         similarities_selected.sort(reverse=True)
         return_list_id = []
+        return_doc_id_val = []
         for val in similarities_selected:
             return_list_id.extend(documents_similarity[val])
+            for doc_id in documents_similarity[val]:
+                return_doc_id_val.append((int(doc_id), float(val)))
 
         return_list_name = []
         for doc_id in return_list_id:
             return_list_name.append(self.document_collection.d_id2name[doc_id])
-        return return_list_name, return_list_id
+        return return_list_name, return_list_id, return_doc_id_val

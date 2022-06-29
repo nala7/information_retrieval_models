@@ -1,8 +1,10 @@
 from read_content import read_dataset, read_query, get_cran_dataset
+from data_sets.cran.cran import read_cran_rel
+from evaluation import evaluate
+
 # from test import test1
 from utils import DocumentCollection, Query
 from framework import VectorFramework
-import os
 
 # print('PLEASE ENTER PATH TO DATA SET')
 # doc_path = input()
@@ -26,14 +28,21 @@ import os
 
 # f = VectorFramework(document_collection)
 # retrieve = f.find(query)
-os.chdir('scr')
-a = os.getcwd()
+
 documents, queries = get_cran_dataset()
 document_collection = DocumentCollection(documents)
 
 f = VectorFramework(document_collection)
-print(f)
-names, ids = f.find(queries[0])
+
+model_queries_results = []
+for i in range(len(queries)):
+    names, ids, ids_vals = f.find(queries[i])
+    model_queries_results.append(ids_vals)
+
+dataset_queries_results = read_cran_rel()
+
+
+# print(evaluation)
 
 # test1()
 print('Done!')

@@ -1,4 +1,3 @@
-import os
 import spacy
 
 from typing import Any

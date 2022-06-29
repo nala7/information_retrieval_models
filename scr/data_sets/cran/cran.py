@@ -1,5 +1,3 @@
-import os
-
 from io import TextIOWrapper
 
 
@@ -37,6 +35,21 @@ def read_cran_queries():
         except ReadingError as error:
             print('Error: ', error)
             return []
+
+
+def read_cran_rel():
+    with open('data_sets/cran/cranqrel', 'r') as file:
+        # each position in the list represents the id of a query
+        # it's a list of list. For each query theres a list of tuples <doc, rel>
+        queries = [[] for _ in range(225)]
+        while True:
+            line = file.readline().split()
+            if not line:
+                break
+            query_id, doc_id, rel = line
+            query_id = int(query_id)
+            queries[query_id - 1].append((int(doc_id), int(rel)))
+    return queries
 
 
 def _read_i(file: TextIOWrapper):
@@ -87,3 +100,6 @@ def _read_w(file: TextIOWrapper):
 class ReadingError(LookupError):
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
+
+
+read_cran_rel()
