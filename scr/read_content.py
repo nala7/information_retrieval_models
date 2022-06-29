@@ -7,9 +7,9 @@ from utils import Document, Query
 from data_sets.cran.cran import read_cran_documents, read_cran_queries, read_cran_rel
 import pickle
 
+nlp = spacy.load('en_core_web_sm')
 
 def process_content(text):
-    nlp = spacy.load('en_core_web_sm')
 
     nlp.max_length = 5030000  # or higher
     doc = nlp(text)
@@ -69,7 +69,8 @@ def get_ir_dataset(dataset_name, load_from_memory=True):
         with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'rb') as infile:
             documents, queries, relevancy = pickle.load(infile)
     else:
-        documents, queries, relevancy = _compute_ir_dataset()
+        documents, queries, relevancy = _compute_ir_dataset(dataset_name)
+        a = os.getcwd()
         with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'wb') as outfile:
             pickle.dump((documents, queries, relevancy), outfile)
     
@@ -101,19 +102,30 @@ def _compute_cran_dataset():
 def _compute_ir_dataset(dataset_name):
     dataset = ir_datasets.load(dataset_name)
 
+    i = 1
     documents = []
     for doc in dataset.docs_iter():
+        print(f'Document: {i}')
+        i += 1
         processed_text = process_content(doc.text)
         documents.append(Document(int(doc.doc_id), str(doc.doc_id), processed_text))
     
     queries = []
+    i = 1
     for q in dataset.queries_iter():
+        print(f'Query: {i}')
+        i += 1
         processed_text = process_content(q.text)
         queries.append(Query(int(q.query_id), processed_text))
     
     query_rel = [[] for _ in range(dataset.queries_count())]
-    for r in dataset.qrel_iter():
-        query_rel[int(r.query_id)].append((int(r.doc_id, 0)))
+    i = 1
+    for r in dataset.qrels_iter():
+        print(f'Relevancy: {i}')
+        i += 1
+        query_rel[int(r.query_id)-1].append((int(r.doc_id, 0)))
+
+    return documents, queries, query_rel
 
 
 def read_query(query_text):

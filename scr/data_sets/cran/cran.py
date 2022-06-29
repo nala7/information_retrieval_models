@@ -102,4 +102,4 @@ class ReadingError(LookupError):
         super().__init__(*args)
 
 
-read_cran_rel()
+# read_cran_rel()
