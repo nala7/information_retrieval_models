@@ -1,9 +1,10 @@
 import spacy
 import os
+import ir_datasets
 
 from typing import Any
 from utils import Document, Query
-from data_sets.cran.cran import read_cran_documents, read_cran_queries
+from data_sets.cran.cran import read_cran_documents, read_cran_queries, read_cran_rel
 import pickle
 
 
@@ -55,14 +56,24 @@ def read_dataset(path):
 def get_cran_dataset(load_from_memory=True):
     if load_from_memory:
         with open('data_sets/cran/cran.pickle', 'rb') as infile:
-            documents, queries = pickle.load(infile)
+            documents, queries, relevancy = pickle.load(infile)
     else:
-        documents, queries = _compute_cran_dataset()
+        documents, queries, relevancy = _compute_cran_dataset()
         with open('data_sets/cran/cran.pickle', 'wb') as outfile:
-            pickle.dump((documents, queries), outfile)
+            pickle.dump((documents, queries, relevancy), outfile)
     
-    return documents, queries
+    return documents, queries, relevancy
 
+def get_ir_dataset(dataset_name, load_from_memory=True):
+    if load_from_memory:
+        with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'rb') as infile:
+            documents, queries, relevancy = pickle.load(infile)
+    else:
+        documents, queries, relevancy = _compute_ir_dataset()
+        with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'wb') as outfile:
+            pickle.dump((documents, queries, relevancy), outfile)
+    
+    return documents, queries, relevancy
 
 def _compute_cran_dataset():
     documents_data = read_cran_documents()
@@ -83,7 +94,26 @@ def _compute_cran_dataset():
         print('Query: ', i)
         i += 1
 
-    return documents, queries
+    relevancy = read_cran_rel()
+
+    return documents, queries, relevancy
+
+def _compute_ir_dataset(dataset_name):
+    dataset = ir_datasets.load(dataset_name)
+
+    documents = []
+    for doc in dataset.docs_iter():
+        processed_text = process_content(doc.text)
+        documents.append(Document(int(doc.doc_id), str(doc.doc_id), processed_text))
+    
+    queries = []
+    for q in dataset.queries_iter():
+        processed_text = process_content(q.text)
+        queries.append(Query(int(q.query_id), processed_text))
+    
+    query_rel = [[] for _ in range(dataset.queries_count())]
+    for r in dataset.qrel_iter():
+        query_rel[int(r.query_id)].append((int(r.doc_id, 0)))
 
 
 def read_query(query_text):

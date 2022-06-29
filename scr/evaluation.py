@@ -71,9 +71,9 @@ def evaluate(model_queries: List, dataset_queries: List):
 
 
 def vary_fw_similarity():
-    documents, queries = get_cran_dataset()
+    documents, queries, dataset_queries_results = get_cran_dataset()
     document_collection = DocumentCollection(documents)
-    dataset_queries_results = read_cran_rel()
+    # dataset_queries_results = read_cran_rel()
 
     # from 0 - 0.9 similarity
     mean_precision = []
