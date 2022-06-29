@@ -29,7 +29,6 @@ def evaluate(model_queries: List, dataset_queries: List):
             if j == len(dataset_doc_rel_list):
                 # The rest of recalled documents are irrelevant
                 ri += len(model_doc_rel_list) - i
-                print("ri = ", ri)
                 break
 
             model_doc = model_doc_rel_list[i][0]
@@ -41,14 +40,12 @@ def evaluate(model_queries: List, dataset_queries: List):
                 rr += 1
                 i += 1
                 j += 1
-                print("rr = ", rr)
             if model_doc > ds_doc:  # A doc wasn't retrieved
                 nr += 1
                 j += 1
             if model_doc < ds_doc:  # A relevant doc wasn't retrieved
                 ri += 1
                 i += 1
-                print("ri = ", ri)
 
         if rr == 0 and ri == 0:
             p = 0
