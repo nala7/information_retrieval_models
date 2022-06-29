@@ -1,8 +1,8 @@
-import math
 import pickle
 from utils import DocumentCollection, Query
 
-class VectorFramework:
+
+class BooleanFramework:
     def __init__(self, document_collection: DocumentCollection, load_document=True):
         if load_document:
             try:
@@ -37,7 +37,7 @@ class VectorFramework:
             try:
                 term_id = dc.t_name2id[term_name]
                 query.weights[term_id] = 1
-            except KeyError: # term is not in vocabulary
+            except KeyError:  # term is not in vocabulary
                 continue
         return query
 
@@ -46,7 +46,7 @@ class VectorFramework:
 
         for term_id in list(query.weights.keys()):
             try:
-                equal = query.weights[term_id] == dc.weights_doc[document_id, term_id]
+                query.weights[term_id] == dc.weights_doc[document_id, term_id]
                 # If not exception then they are equal because are 1
                 return True
             except KeyError:
