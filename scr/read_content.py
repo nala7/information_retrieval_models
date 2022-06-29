@@ -1,4 +1,5 @@
 import spacy
+import os
 
 from typing import Any
 from utils import Document, Query

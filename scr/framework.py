@@ -134,4 +134,5 @@ class VectorFramework:
         return_list_name = []
         for doc_id in return_list_id:
             return_list_name.append(self.document_collection.d_id2name[doc_id])
+
         return return_list_name, return_list_id, return_doc_id_val
