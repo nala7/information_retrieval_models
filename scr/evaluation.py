@@ -1,8 +1,8 @@
+import numpy as np
+
 from typing import List
 from read_content import get_cran_dataset
-from evaluation import evaluate
-from scr.data_sets.cran.cran import read_cran_rel
-
+from data_sets.cran.cran import read_cran_rel
 from utils import DocumentCollection
 from framework import VectorFramework
 
@@ -50,7 +50,10 @@ def evaluate(model_queries: List, dataset_queries: List):
                 i += 1
                 print("ri = ", ri)
 
-        p = round(rr/(rr + ri), 2)
+        if rr == 0 and ri == 0:
+            p = 0
+        else:
+            p = round(rr/(rr + ri), 2)
         print(p)
         precision_per_query.append(p)
 
@@ -81,7 +84,7 @@ def vary_fw_similarity():
     mean_f1 = []
 
     f = VectorFramework(document_collection)
-    for umbral in range(0, 1, 0.1):
+    for umbral in np.arange(0, 1, 0.1):
         f.similarity_umbral = umbral
         model_queries_results = []
         for i in range(len(queries)):
@@ -93,10 +96,21 @@ def vary_fw_similarity():
         mean_recall.append((sum(recall)/len(recall)))
         mean_f1.append(sum(f1)/len(f1))
 
+    _graph_similarity_mean(mean_precision, "Precision", "Vector")
+    _graph_similarity_mean(mean_recall, "Recall", "Vector")
+    _graph_similarity_mean(mean_f1, "F1", "Vector")
 
-def graph_mean_similarity():
-    pass
 
+def _graph_similarity_mean(mean_list, evaluation_name, model):
+    import matplotlib.pyplot as plt
 
-def _graph_two_lists():
+    similarity = np.arange(0, 1, 0.1)
+
+    plt.xlabel("similarity")
+    plt.ylabel(f'mean {evaluation_name}')
+    plt.title(f'{model} framework')
+    plt.plot(similarity, mean_list)
+    plt.legend()
+    plt.show()
+
     pass
