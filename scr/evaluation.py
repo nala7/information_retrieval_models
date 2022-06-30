@@ -72,19 +72,14 @@ def evaluate(model_queries: List, dataset_queries: List):
 
 
 def vary_fw_similarity(dataset_name):
-    if dataset_name == "cran":
-        documents, queries, dataset_queries_results = get_dataset('cran')
-        document_collection = DocumentCollection(documents)
-    else:
-        documents, queries, dataset_queries_results = get_dataset(dataset_name)
-        document_collection = DocumentCollection(documents)
+    documents, queries, dataset_queries_results = get_dataset(dataset_name)
 
     # from 0 - 0.9 similarity
     mean_precision = []
     mean_recall = []
     mean_f1 = []
 
-    f = VectorFramework(document_collection)
+    f = VectorFramework(f'dc_{dataset_name}')
     for umbral in np.arange(0, 1, 0.1):
         f.similarity_umbral = umbral
         model_queries_results = []
@@ -116,13 +111,7 @@ def _graph_similarity_mean(mean_list, evaluation_name, model, dataset_name):
 
 
 def compare_models(dataset_name):
-    if dataset_name == "cran":
-        documents, queries, dataset_queries_results = get_dataset('cran')
-        document_collection = DocumentCollection(documents)
-    else:
-        documents, queries, dataset_queries_results = get_dataset(dataset_name)
-        document_collection = DocumentCollection(documents)
-
+    documents, queries, dataset_queries_results = get_dataset(dataset_name)
     vector_precision = []
     vector_recall = []
     vector_f1 = []
@@ -131,8 +120,8 @@ def compare_models(dataset_name):
     boolean_recall = []
     boolean_f1 = []
 
-    vf = VectorFramework(document_collection)
-    bf = BooleanFramework(document_collection)
+    vf = VectorFramework(f'dc_{dataset_name}')
+    bf = BooleanFramework(f'dc_{dataset_name}')
 
     vectorf_qrel_list = []
     booleanf_qrel_list = []

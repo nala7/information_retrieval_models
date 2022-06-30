@@ -1,6 +1,7 @@
-from read_content import read_dataset, read_query, get_cran_dataset, get_ir_dataset
+from read_content import read_dataset, read_query, get_dataset
 from data_sets.cran.cran import read_cran_rel
 from evaluation import evaluate, vary_fw_similarity, compare_models
+from boolean_framework import BooleanFramework
 
 # from test import test1
 from utils import DocumentCollection, Query
@@ -64,7 +65,13 @@ import os
 
 os.chdir('scr')
 a = os.getcwd()
-dataset_queries_results = get_ir_dataset('vaswani', load_from_memory=False)
+
+d1, *_ = get_dataset('vaswani')
+d2, *_ = get_dataset('cran')
+vf = VectorFramework('dc_vaswani', DocumentCollection(d1))
+vf = VectorFramework('dc_cran', DocumentCollection(d2))
+bf = BooleanFramework('dc_vaswani', DocumentCollection(d1))
+bf = BooleanFramework('dc_cran', DocumentCollection(d2))
 #
 # precision, recall, f1 = evaluate(model_queries_results, dataset_queries_results)
 #

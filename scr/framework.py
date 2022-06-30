@@ -5,24 +5,20 @@ from utils import DocumentCollection, Query
 
 
 class VectorFramework:
-    def __init__(self, document_collection: DocumentCollection, load_document=True):
-        self.alpha = 0.5
-        self.similarity_umbral = 0.3
-        if load_document:
-            try:
-                with open('document_collection.pickle', 'rb') as infile:
-                    document_collection = pickle.load(infile)
-            except FileNotFoundError:
-                self._process_and_save_dc(document_collection)
+    def __init__(self, dc_name, document_collection = None):
+        self.alpha = 0.4
+        self.similarity_umbral = 0.5
+        if document_collection is None:
+            with open(f'document_collection/{dc_name}_vector.pickle', 'rb') as infile:
+                document_collection = pickle.load(infile)
         else:
-            self._process_and_save_dc(document_collection)
-
+            self._process_and_save_dc(document_collection, dc_name)
         self.document_collection = document_collection
 
-    def _process_and_save_dc(self, document_collection):
+    def _process_and_save_dc(self, document_collection, dc_name):
         self.document_collection = document_collection
         self.compute_documents_weights()
-        with open('document_collection.pickle', 'wb') as outfile:
+        with open(f'document_collection/{dc_name}_vector.pickle', 'wb') as outfile:
             pickle.dump(document_collection, outfile)
 
     def _compute_tf(self, document_id, term_id):

@@ -3,22 +3,18 @@ from utils import DocumentCollection, Query
 
 
 class BooleanFramework:
-    def __init__(self, document_collection: DocumentCollection, load_document=True):
-        if load_document:
-            try:
-                with open('scr/document_collection_boolean.pickle', 'rb') as infile:
-                    document_collection = pickle.load(infile)
-            except FileNotFoundError:
-                self._process_and_save_dc(document_collection)
+    def __init__(self, dc_name, document_collection: DocumentCollection = None):
+        if document_collection is None:
+           with open(f'document_collection/{dc_name}_boolean.pickle', 'rb') as infile:
+                document_collection = pickle.load(infile)
         else:
-            self._process_and_save_dc(document_collection)
-
+            self._process_and_save_dc(document_collection, dc_name)
         self.document_collection = document_collection
 
-    def _process_and_save_dc(self, document_collection):
+    def _process_and_save_dc(self, document_collection, dc_name):
         self.document_collection = document_collection
         self.compute_documents_weights()
-        with open('scr/document_collection_boolean.pickle', 'wb') as outfile:
+        with open(f'document_collection/{dc_name}_boolean.pickle', 'wb') as outfile:
             pickle.dump(document_collection, outfile)
 
     def compute_documents_weights(self):
