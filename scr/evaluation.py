@@ -33,9 +33,7 @@ def evaluate(model_queries: List, dataset_queries: List):
                 break
 
             model_doc = model_doc_rel_list[i][0]
-            print(model_doc)
             ds_doc = dataset_doc_rel_list[j][0]
-            print(ds_doc)
 
             if model_doc == ds_doc:  # It's a match
                 rr += 1
@@ -52,14 +50,12 @@ def evaluate(model_queries: List, dataset_queries: List):
             p = 0
         else:
             p = round(rr/(rr + ri), 2)
-        print(p)
         precision_per_query.append(p)
 
         if rr == 0 and nr == 0:
             r = 0
         else:
             r = round(rr/(rr+nr), 2)
-        print(r)
         recall_per_query.append(r)
 
         if p == 0 and r == 0:
@@ -104,21 +100,14 @@ def _graph_similarity_mean(mean_list, evaluation_name, model, dataset_name):
     plt.ylabel(f'mean {evaluation_name}')
     plt.title(f'{model} framework, {dataset_name}')
     plt.plot(similarity, mean_list)
-    plt.legend()
+    plt.legend(loc="botton left")
     plt.show()
 
     pass
 
 
 def compare_models(dataset_name):
-    documents, queries, dataset_queries_results = get_dataset(dataset_name)
-    vector_precision = []
-    vector_recall = []
-    vector_f1 = []
-
-    boolean_precision = []
-    boolean_recall = []
-    boolean_f1 = []
+    _, queries, dataset_queries_results = get_dataset(dataset_name)
 
     vf = VectorFramework(f'dc_{dataset_name}')
     bf = BooleanFramework(f'dc_{dataset_name}')
@@ -134,16 +123,16 @@ def compare_models(dataset_name):
     vf_precision, vf_recall, vf_f1 = evaluate(vectorf_qrel_list, dataset_queries_results)
     bf_precision, bf_recall, bf_f1 = evaluate(booleanf_qrel_list, dataset_queries_results)
 
-    _graph_models_evaluation(vf_precision, bf_precision, "Precision")
-    _graph_models_evaluation(vf_recall, bf_recall, "Recall")
-    _graph_models_evaluation(vf_f1, bf_f1, "F1")
+    _graph_models_evaluation(vf_precision, bf_precision, "Precision", dataset_name)
+    _graph_models_evaluation(vf_recall, bf_recall, "Recall", dataset_name)
+    _graph_models_evaluation(vf_f1, bf_f1, "F1", dataset_name)
 
 
-def _graph_models_evaluation(vector_queries, boolean_queries, evaluation_name):
+def _graph_models_evaluation(vector_queries, boolean_queries, evaluation_name, dataset_name):
     plt.xlabel("query_id")
     plt.ylabel(f'mean {evaluation_name}')
-    plt.title(f'Framework comparison')
+    plt.title(f'{dataset_name} Framework, {evaluation_name} comparison')
     plt.plot(np.arange(len(vector_queries)), vector_queries)
     plt.plot(np.arange(len(boolean_queries)), boolean_queries)
-    plt.legend()
+    plt.legend(loc="botton left")
     plt.show()
