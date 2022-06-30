@@ -6,7 +6,7 @@ from utils import DocumentCollection, Query
 
 class VectorFramework:
     def __init__(self, document_collection: DocumentCollection, load_document=True):
-        self.alpha = 0.4
+        self.alpha = 0.5
         self.similarity_umbral = 0.3
         if load_document:
             try:

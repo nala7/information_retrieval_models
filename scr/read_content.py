@@ -123,7 +123,7 @@ def _compute_ir_dataset(dataset_name):
     for r in dataset.qrels_iter():
         print(f'Relevancy: {i}')
         i += 1
-        query_rel[int(r.query_id)-1].append((int(r.doc_id, 0)))
+        query_rel[int(r.query_id)-1].append((int(r.doc_id), 0))
 
     return documents, queries, query_rel
 
