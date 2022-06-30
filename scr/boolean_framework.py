@@ -56,10 +56,12 @@ class BooleanFramework:
         self.compute_query_weights(query)
         response_ids = []
         response_titles = []
+        response_ids_val = []
         for doc_id in self.document_collection.d_id2name.keys():
             similarity = self._sim_of_document(doc_id, query)
             if similarity: 
                 response_ids.append(doc_id)
+                response_ids_val.append((doc_id, 1))
                 response_titles.append(self.document_collection.d_id2name[doc_id])
 
         return response_titles, response_ids

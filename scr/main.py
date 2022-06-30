@@ -1,6 +1,6 @@
 from read_content import read_dataset, read_query, get_cran_dataset
 from data_sets.cran.cran import read_cran_rel
-from evaluation import evaluate, _graph_similarity_mean, vary_fw_similarity
+from evaluation import evaluate, vary_fw_similarity, compare_models
 
 # from test import test1
 from utils import DocumentCollection, Query
@@ -45,7 +45,9 @@ from framework import VectorFramework
 #
 # _graph_similarity_mean(precision, "precision", "vector")
 
-vary_fw_similarity("vaswani")
+# vary_fw_similarity("cran")
+
+compare_models("cran")
 
 # test1()
 print('Done!')

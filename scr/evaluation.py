@@ -135,22 +135,23 @@ def compare_models(dataset_name):
     vf = VectorFramework(document_collection)
     bf = BooleanFramework(document_collection)
 
+    vectorf_qrel_list = []
+    booleanf_qrel_list = []
     for i in range(len(queries)):
         _, _, vf_qrel = vf.find(queries[i])
-        _, _,
-        model_queries_results.append(ids_vals)
-    precision, recall, f1 = evaluate(model_queries_results, dataset_queries_results)
+        _, _, bf_qrel = bf.find(queries[i])
+        vectorf_qrel_list.append(vf_qrel)
+        booleanf_qrel_list.append(bf_qrel)
 
-        mean_precision.append(sum(precision)/len(precision))
-        mean_recall.append((sum(recall)/len(recall)))
-        mean_f1.append(sum(f1)/len(f1))
+    vf_precision, vf_recall, vf_f1 = evaluate(vectorf_qrel_list, dataset_queries_results)
+    bf_precision, bf_recall, bf_f1 = evaluate(booleanf_qrel_list, dataset_queries_results)
 
-    _graph_similarity_mean(mean_precision, "Precision", "Vector", dataset_name)
-    _graph_similarity_mean(mean_recall, "Recall", "Vector", dataset_name)
-    _graph_similarity_mean(mean_f1, "F1", "Vector", dataset_name)
+    _graph_models_evaluation(vf_precision, bf_precision, "Precision")
+    _graph_models_evaluation(vf_recall, bf_recall, "Recall")
+    _graph_models_evaluation(vf_f1, bf_f1, "F1")
 
 
-def graph_models_evaluation(vector_queries, boolean_queries, evaluation_name):
+def _graph_models_evaluation(vector_queries, boolean_queries, evaluation_name):
     plt.xlabel("query_id")
     plt.ylabel(f'mean {evaluation_name}')
     plt.title(f'Framework comparison')
