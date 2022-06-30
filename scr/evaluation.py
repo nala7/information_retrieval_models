@@ -100,7 +100,7 @@ def _graph_similarity_mean(mean_list, evaluation_name, model, dataset_name):
     plt.ylabel(f'mean {evaluation_name}')
     plt.title(f'{model} framework, {dataset_name}')
     plt.plot(similarity, mean_list)
-    plt.legend(loc="botton left")
+    plt.legend(loc="lower left")
     plt.show()
 
     pass
@@ -131,8 +131,32 @@ def compare_models(dataset_name):
 def _graph_models_evaluation(vector_queries, boolean_queries, evaluation_name, dataset_name):
     plt.xlabel("query_id")
     plt.ylabel(f'mean {evaluation_name}')
-    plt.title(f'{dataset_name} Framework, {evaluation_name} comparison')
-    plt.plot(np.arange(len(vector_queries)), vector_queries)
-    plt.plot(np.arange(len(boolean_queries)), boolean_queries)
-    plt.legend(loc="botton left")
+    plt.title(f'{dataset_name} dataset, {evaluation_name} comparison')
+    plt.plot(np.arange(len(vector_queries)), vector_queries, label="Vector")
+    plt.plot(np.arange(len(boolean_queries)), boolean_queries, label="Boolean")
+    plt.legend(loc="upper left")
+    plt.show()
+
+
+def show_boolean_means(dataset_name: str):
+    _, queries, dataset_queries_results = get_dataset(dataset_name)
+
+    bf = BooleanFramework(f'dc_{dataset_name}')
+
+    booleanf_qrel_list = []
+    for i in range(len(queries)):
+        _, _, bf_qrel = bf.find(queries[i])
+        booleanf_qrel_list.append(bf_qrel)
+
+    bf_precision, bf_recall, bf_f1 = evaluate(booleanf_qrel_list, dataset_queries_results)
+
+
+def _graph_boolean_means(bf_precision, bf_recall, bf_f1):
+    plt.xlabel("metric")
+    plt.ylabel(f'mean')
+    plt.title(f'{dataset_name} dataset, metric comparison')
+    plt.plot(1, bf_precision, label="Precision")
+    plt.plot(2, bf_recall, label="Recall")
+    plt.plot(3, bf_f1, label="F1")
+    plt.legend(loc="upper left")
     plt.show()

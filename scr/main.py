@@ -1,79 +1,38 @@
-from read_content import read_dataset, read_query, get_dataset
-from data_sets.cran.cran import read_cran_rel
-from evaluation import evaluate, vary_fw_similarity, compare_models
-from boolean_framework import BooleanFramework
+from evaluation import vary_fw_similarity, compare_models
+from evaluation import show_boolean_means
 
-# from test import test1
-from utils import DocumentCollection, Query
-from framework import VectorFramework
 import os
 
+# os.chdir('scr')
+# a = os.getcwd()
 
-# print('····································································')
-# print('················SISTEMA DE EXTRACCIÓN DE INFORMACIÓN················')
-# print('····································································')
-# print('··············· Nadia Glez  &  Alejandro Labourdette ···············')
-# print('····································································')
-# while True:
-#     print('Por favor ingrese alguna de las siguientes instrucciones:')
-#     print('~ test <framework> <dataset>')
-#     print('<framework>: framework a probar ("vector","boolean")')
-#     print('<dataset>: dataset que será utilizado ("cran","vaswani")')
+print('····································································')
+print('················SISTEMA DE EXTRACCIÓN DE INFORMACIÓN················')
+print('····································································')
+print('··············· Nadia Glez  &  Alejandro Labourdette ···············')
+print('····································································')
+while True:
+    print('Por favor ingrese alguna de las siguientes instrucciones:')
+    print('# ~ test <framework> <dataset>')
+    print('#     Computa todas las queries del dataset usando un framework(modelo)')
+    print('# ~ compare <dataset>')
+    print('#     Compara los frameworks vetorial y booleano usando el dataset especificado')
+    print('#     <framework>: framework a probar ("vector","boolean")')
+    print('#     <dataset>: dataset que será utilizado ("cran","vaswani")')
 
-#     instruction = input('   ~ ')
-#     if len(instruction.split()) == 2:
-#         command, dataset = instruction.split()
-#         if command == 'compare':
-#             if dataset == 'cran':
-#                 # Compare both models using cran dataset
-#                 pass
-#             else:
-#                 # Compare both models using any other dataset
-#                 pass
-#     if len(instruction.split()) == 3:
-#         command, framework, dataset = instruction.split()
-#         if command == 'test':
-#             if framework == 'vector':
-#                 if dataset == 'cran':
-#                     # Run test vector cran
-#                     pass
-#                 else:
-#                     # Run test vector <other_dataset>
-#                     pass
-#             if framework == 'boolean':
-#                 if dataset == 'cran':
-#                     # Run test vector cran
-#                     pass
-#                 else:
-#                     # Run test vector <other_dataset>
-#                     pass
-
-# doc_path = input()
-# print('PLEASE ENTER QUERY')
-# query = input()
-
-# filtered_doc_list = read_dataset(doc_path)
-# filtered_query_list = read_query(query)
-
-# # d1 = Document('d1', ['leon', 'leon', 'leon'])
-# # d2 = Document('d2', ['leon', 'leon', 'leon', 'zorro'])
-# # d3 = Document('d3', ['leon', 'zorro', 'nutria'])
-# # d4 = Document('d4', ['leon', 'leon', 'leon', 'zorro', 'zorro', 'zorro'])
-# # d5 = Document('d5', ['nutria'])
-
-
-
-os.chdir('scr')
-a = os.getcwd()
-
-compare_models('cran')
-#
-# precision, recall, f1 = evaluate(model_queries_results, dataset_queries_results)
-#
-# _graph_similarity_mean(precision, "precision", "vector")
-
-# vary_fw_similarity()
-
-# test1()
-
-print('Done!')
+    instruction = input('   ~ ')
+    if len(instruction.split()) == 2:
+        command, dataset = instruction.split()
+        if command == 'compare':
+            # Compare both models using  dataset
+            compare_models(dataset)
+    if len(instruction.split()) == 3:
+        command, framework, dataset = instruction.split()
+        if command == 'test':
+            if framework == 'vector':
+                # Run test vector cran
+                vary_fw_similarity(dataset)
+            if framework == 'boolean':
+                # Run test vector cran
+                show_boolean_means(dataset)
+    print('Done!')
