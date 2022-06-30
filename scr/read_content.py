@@ -53,30 +53,19 @@ def read_dataset(path):
     return doc_list
 
 
-def get_cran_dataset(load_from_memory=True):
-    if load_from_memory:
-        with open('data_sets/cran/cran.pickle', 'rb') as infile:
-            documents, queries, relevancy = pickle.load(infile)
-    else:
-        documents, queries, relevancy = _compute_cran_dataset()
-        with open('data_sets/cran/cran.pickle', 'wb') as outfile:
-            pickle.dump((documents, queries, relevancy), outfile)
-    
-    return documents, queries, relevancy
-
-
-def get_ir_dataset(dataset_name, load_from_memory=True):
+def get_dataset(dataset_name, load_from_memory=True):
     if load_from_memory:
         with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'rb') as infile:
             documents, queries, relevancy = pickle.load(infile)
     else:
-        documents, queries, relevancy = _compute_ir_dataset(dataset_name)
-        a = os.getcwd()
+        if dataset_name == 'cran':
+            documents, queries, relevancy = _compute_cran_dataset()
+        else:
+            documents, queries, relevancy = _compute_ir_dataset(dataset_name)
         with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'wb') as outfile:
             pickle.dump((documents, queries, relevancy), outfile)
     
     return documents, queries, relevancy
-
 
 def _compute_cran_dataset():
     documents_data = read_cran_documents()

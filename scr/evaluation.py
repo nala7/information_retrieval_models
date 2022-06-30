@@ -2,8 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from typing import List
-from read_content import get_cran_dataset, get_ir_dataset
-from data_sets.cran.cran import read_cran_rel
+from read_content import get_dataset
 from utils import DocumentCollection
 from framework import VectorFramework
 from boolean_framework import BooleanFramework
@@ -74,10 +73,10 @@ def evaluate(model_queries: List, dataset_queries: List):
 
 def vary_fw_similarity(dataset_name):
     if dataset_name == "cran":
-        documents, queries, dataset_queries_results = get_cran_dataset()
+        documents, queries, dataset_queries_results = get_dataset('cran')
         document_collection = DocumentCollection(documents)
     else:
-        documents, queries, dataset_queries_results = get_ir_dataset(dataset_name)
+        documents, queries, dataset_queries_results = get_dataset(dataset_name)
         document_collection = DocumentCollection(documents)
 
     # from 0 - 0.9 similarity
@@ -118,10 +117,10 @@ def _graph_similarity_mean(mean_list, evaluation_name, model, dataset_name):
 
 def compare_models(dataset_name):
     if dataset_name == "cran":
-        documents, queries, dataset_queries_results = get_cran_dataset()
+        documents, queries, dataset_queries_results = get_dataset('cran')
         document_collection = DocumentCollection(documents)
     else:
-        documents, queries, dataset_queries_results = get_ir_dataset(dataset_name)
+        documents, queries, dataset_queries_results = get_dataset(dataset_name)
         document_collection = DocumentCollection(documents)
 
     vector_precision = []
