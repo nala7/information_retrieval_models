@@ -64,6 +64,7 @@ def get_cran_dataset(load_from_memory=True):
     
     return documents, queries, relevancy
 
+
 def get_ir_dataset(dataset_name, load_from_memory=True):
     if load_from_memory:
         with open(f'data_sets/{dataset_name}/{dataset_name}.pickle', 'rb') as infile:
@@ -75,6 +76,7 @@ def get_ir_dataset(dataset_name, load_from_memory=True):
             pickle.dump((documents, queries, relevancy), outfile)
     
     return documents, queries, relevancy
+
 
 def _compute_cran_dataset():
     documents_data = read_cran_documents()
@@ -98,6 +100,7 @@ def _compute_cran_dataset():
     relevancy = read_cran_rel()
 
     return documents, queries, relevancy
+
 
 def _compute_ir_dataset(dataset_name):
     dataset = ir_datasets.load(dataset_name)
@@ -123,7 +126,7 @@ def _compute_ir_dataset(dataset_name):
     for r in dataset.qrels_iter():
         print(f'Relevancy: {i}')
         i += 1
-        query_rel[int(r.query_id)-1].append((int(r.doc_id), 0))
+        query_rel[int(r.query_id) - 1].append((int(r.doc_id), 0))
 
     return documents, queries, query_rel
 

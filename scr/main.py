@@ -45,7 +45,7 @@ from framework import VectorFramework
 #
 # _graph_similarity_mean(precision, "precision", "vector")
 
-vary_fw_similarity()
+vary_fw_similarity("vaswani")
 
 # test1()
 print('Done!')
