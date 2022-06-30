@@ -1,5 +1,8 @@
 from evaluation import vary_fw_similarity, compare_models
 from evaluation import show_boolean_means
+from framework import VectorFramework
+from read_content import process_content
+from utils import Query
 
 import os
 
@@ -35,4 +38,10 @@ while True:
             if framework == 'boolean':
                 # Run test vector cran
                 show_boolean_means(dataset)
+    else:
+        f = VectorFramework('dc_cran')
+        q = Query(-1, process_content(instruction))
+        name, *_ = f.find(q)
+        print(name)
+
     print('Done!')

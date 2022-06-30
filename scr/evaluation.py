@@ -83,6 +83,7 @@ def vary_fw_similarity(dataset_name):
         for i in range(len(queries)):
             names, ids, ids_vals = f.find(queries[i])
             model_queries_results.append(ids_vals)
+        # por cada umbral, todas las m\'etricas
         precision, recall, f1 = evaluate(model_queries_results, dataset_queries_results)
 
         mean_precision.append(sum(precision)/len(precision))

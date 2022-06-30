@@ -9,6 +9,7 @@ import pickle
 
 nlp = spacy.load('en_core_web_sm')
 
+
 def process_content(text):
 
     nlp.max_length = 5030000  # or higher
