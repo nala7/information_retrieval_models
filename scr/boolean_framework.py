@@ -60,4 +60,4 @@ class BooleanFramework:
                 response_ids_val.append((doc_id, 1))
                 response_titles.append(self.document_collection.d_id2name[doc_id])
 
-        return response_titles, response_ids
+        return response_titles, response_ids, response_ids_val

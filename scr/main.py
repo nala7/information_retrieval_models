@@ -66,12 +66,7 @@ import os
 os.chdir('scr')
 a = os.getcwd()
 
-d1, *_ = get_dataset('vaswani')
-d2, *_ = get_dataset('cran')
-vf = VectorFramework('dc_vaswani', DocumentCollection(d1))
-vf = VectorFramework('dc_cran', DocumentCollection(d2))
-bf = BooleanFramework('dc_vaswani', DocumentCollection(d1))
-bf = BooleanFramework('dc_cran', DocumentCollection(d2))
+compare_models('cran')
 #
 # precision, recall, f1 = evaluate(model_queries_results, dataset_queries_results)
 #
