@@ -1,10 +1,12 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 from typing import List
-from read_content import get_cran_dataset
+from read_content import get_cran_dataset, get_ir_dataset
 from data_sets.cran.cran import read_cran_rel
 from utils import DocumentCollection
 from framework import VectorFramework
+from boolean_framework import BooleanFramework
 
 
 def evaluate(model_queries: List, dataset_queries: List):
@@ -70,10 +72,13 @@ def evaluate(model_queries: List, dataset_queries: List):
     return precision_per_query, recall_per_query, f1_per_query
 
 
-def vary_fw_similarity():
-    documents, queries, dataset_queries_results = get_cran_dataset()
-    document_collection = DocumentCollection(documents)
-    # dataset_queries_results = read_cran_rel()
+def vary_fw_similarity(dataset_name):
+    if dataset_name == "cran":
+        documents, queries, dataset_queries_results = get_cran_dataset()
+        document_collection = DocumentCollection(documents)
+    else:
+        documents, queries, dataset_queries_results = get_ir_dataset(dataset_name)
+        document_collection = DocumentCollection(documents)
 
     # from 0 - 0.9 similarity
     mean_precision = []
@@ -93,21 +98,64 @@ def vary_fw_similarity():
         mean_recall.append((sum(recall)/len(recall)))
         mean_f1.append(sum(f1)/len(f1))
 
-    _graph_similarity_mean(mean_precision, "Precision", "Vector")
-    _graph_similarity_mean(mean_recall, "Recall", "Vector")
-    _graph_similarity_mean(mean_f1, "F1", "Vector")
+    _graph_similarity_mean(mean_precision, "Precision", "Vector", dataset_name)
+    _graph_similarity_mean(mean_recall, "Recall", "Vector", dataset_name)
+    _graph_similarity_mean(mean_f1, "F1", "Vector", dataset_name)
 
 
-def _graph_similarity_mean(mean_list, evaluation_name, model):
-    import matplotlib.pyplot as plt
-
+def _graph_similarity_mean(mean_list, evaluation_name, model, dataset_name):
     similarity = np.arange(0, 1, 0.1)
 
     plt.xlabel("similarity")
     plt.ylabel(f'mean {evaluation_name}')
-    plt.title(f'{model} framework')
+    plt.title(f'{model} framework, {dataset_name}')
     plt.plot(similarity, mean_list)
     plt.legend()
     plt.show()
 
     pass
+
+
+def compare_models(dataset_name):
+    if dataset_name == "cran":
+        documents, queries, dataset_queries_results = get_cran_dataset()
+        document_collection = DocumentCollection(documents)
+    else:
+        documents, queries, dataset_queries_results = get_ir_dataset(dataset_name)
+        document_collection = DocumentCollection(documents)
+
+    vector_precision = []
+    vector_recall = []
+    vector_f1 = []
+
+    boolean_precision = []
+    boolean_recall = []
+    boolean_f1 = []
+
+    vf = VectorFramework(document_collection)
+    bf = BooleanFramework(document_collection)
+
+    vectorf_qrel_list = []
+    booleanf_qrel_list = []
+    for i in range(len(queries)):
+        _, _, vf_qrel = vf.find(queries[i])
+        _, _, bf_qrel = bf.find(queries[i])
+        vectorf_qrel_list.append(vf_qrel)
+        booleanf_qrel_list.append(bf_qrel)
+
+    vf_precision, vf_recall, vf_f1 = evaluate(vectorf_qrel_list, dataset_queries_results)
+    bf_precision, bf_recall, bf_f1 = evaluate(booleanf_qrel_list, dataset_queries_results)
+
+    _graph_models_evaluation(vf_precision, bf_precision, "Precision")
+    _graph_models_evaluation(vf_recall, bf_recall, "Recall")
+    _graph_models_evaluation(vf_f1, bf_f1, "F1")
+
+
+def _graph_models_evaluation(vector_queries, boolean_queries, evaluation_name):
+    plt.xlabel("query_id")
+    plt.ylabel(f'mean {evaluation_name}')
+    plt.title(f'Framework comparison')
+    plt.plot(np.arange(len(vector_queries)), vector_queries)
+    plt.plot(np.arange(len(boolean_queries)), boolean_queries)
+    plt.legend()
+    plt.show()

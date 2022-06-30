@@ -1,6 +1,6 @@
 from read_content import read_dataset, read_query, get_cran_dataset, get_ir_dataset
 from data_sets.cran.cran import read_cran_rel
-from evaluation import evaluate, _graph_similarity_mean, vary_fw_similarity
+from evaluation import evaluate, vary_fw_similarity, compare_models
 
 # from test import test1
 from utils import DocumentCollection, Query
