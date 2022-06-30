@@ -1,3 +1,4 @@
+from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -150,13 +151,19 @@ def show_boolean_means(dataset_name: str):
 
     bf_precision, bf_recall, bf_f1 = evaluate(booleanf_qrel_list, dataset_queries_results)
 
+    _graph_boolean_means(bf_precision, bf_recall, bf_f1, dataset_name)
 
-def _graph_boolean_means(bf_precision, bf_recall, bf_f1):
+
+def _graph_boolean_means(bf_precision, bf_recall, bf_f1, dataset_name):
+    p_mean = round(sum(bf_precision)/len(bf_precision), 3)
+    r_mean = round(sum(bf_recall)/len(bf_recall), 3)
+    f1_mean = round(sum(bf_f1)/len(bf_f1), 3)
+
     plt.xlabel("metric")
     plt.ylabel(f'mean')
     plt.title(f'{dataset_name} dataset, metric comparison')
-    plt.plot(1, bf_precision, label="Precision")
-    plt.plot(2, bf_recall, label="Recall")
-    plt.plot(3, bf_f1, label="F1")
+    plt.plot(range(len(bf_precision)), bf_precision, label=f'Precision mean = {p_mean}')
+    plt.plot(range(len(bf_recall)), bf_recall, label=f'Recall mean = {r_mean}')
+    plt.plot(range(len(bf_f1)),  bf_f1, label=f'F1 mean = {f1_mean}')
     plt.legend(loc="upper left")
     plt.show()
